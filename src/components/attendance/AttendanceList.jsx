@@ -147,6 +147,16 @@ export default function AttendanceList({ refreshTrigger }) {
     { key: 'status', label: strings.statusColumn },
   ]
 
+  const statusSummary = useMemo(() => {
+    const summary = { Present: 0, Absent: 0 }
+    filteredList.forEach((r) => {
+      const status = (r.status || '').toLowerCase()
+      if (status === 'present') summary.Present += 1
+      if (status === 'absent') summary.Absent += 1
+    })
+    return summary
+  }, [filteredList])
+
   if (loading) {
     return (
       <div className="overflow-hidden rounded-2xl bg-background">
@@ -205,10 +215,14 @@ export default function AttendanceList({ refreshTrigger }) {
             <Select
               id="attendance-filter-status"
               value={filterStatus}
-              onChange={setFilterStatus}
+              onChange={(val) => {
+                setFilterStatus(val)
+                setAppliedFilterStatus(val)
+              }}
               options={statusOptions}
               placeholder={strings.filterStatusAll}
               aria-label={strings.filterByStatus}
+              searchable={false}
             />
           </div>
           <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[160px]">
@@ -245,6 +259,20 @@ export default function AttendanceList({ refreshTrigger }) {
           </Button>
         </div>
         {dateError && <p className="text-sm text-danger">{dateError}</p>}
+        {filteredList.length > 0 && (
+          <div className="flex flex-wrap gap-3 pt-1 text-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary-muted px-3 py-1 text-primary">
+              <span className="h-2 w-2 rounded-full bg-primary" />
+              <span>{strings.statusPresent}</span>
+              <span className="font-semibold">{statusSummary.Present}</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-danger-light px-3 py-1 text-danger">
+              <span className="h-2 w-2 rounded-full bg-danger" />
+              <span>{strings.statusAbsent}</span>
+              <span className="font-semibold">{statusSummary.Absent}</span>
+            </div>
+          </div>
+        )}
       </div>
       <Table
         columns={columns}
