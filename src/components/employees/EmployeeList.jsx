@@ -127,16 +127,16 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
           <div className="space-y-3">
             <p>Are you sure you want to delete this employee? This cannot be undone.</p>
             <dl className="rounded-xl bg-surface-alt p-4 text-sm space-y-2">
-              <div className="flex gap-2">
-                <dt className="min-w-32 font-medium text-text-muted">{strings.employeeId}</dt>
+              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
+                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.employeeId}</dt>
                 <dd className="text-text">{deleteTarget.employeeId}</dd>
               </div>
-              <div className="flex gap-2">
-                <dt className="min-w-32 font-medium text-text-muted">{strings.fullName}</dt>
+              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
+                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.fullName}</dt>
                 <dd className="text-text">{deleteTarget.fullName}</dd>
               </div>
-              <div className="flex gap-2">
-                <dt className="min-w-32 font-medium text-text-muted">{strings.department}</dt>
+              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
+                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.department}</dt>
                 <dd className="text-text">{deleteTarget.departmentName}</dd>
               </div>
             </dl>

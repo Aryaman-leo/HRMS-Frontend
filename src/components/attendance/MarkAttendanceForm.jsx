@@ -177,8 +177,8 @@ export default function MarkAttendanceForm({ onMarked }) {
             {success}
           </div>
         )}
-        <div className="mb-4 flex flex-wrap items-end gap-4">
-          <div className="min-w-[200px]">
+        <div className="mb-4 flex flex-wrap items-end gap-3 sm:gap-4">
+          <div className="w-full min-w-0 sm:min-w-[200px]">
             <label htmlFor="attendance-date" className="mb-1 flex items-center gap-2 text-sm font-medium text-text">
               <Calendar size={18} color={ICON_MUTED} className="shrink-0" />
               {strings.dateLabel}
@@ -200,7 +200,7 @@ export default function MarkAttendanceForm({ onMarked }) {
             {loading ? common.loading : strings.saveAttendance}
           </Button>
         </div>
-        <div className="overflow-hidden rounded-2xl bg-surface-alt">
+        <div className="overflow-x-auto rounded-2xl bg-surface-alt">
           <table className="w-full min-w-[400px] border-collapse">
             <thead>
               <tr>

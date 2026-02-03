@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { CalendarTick, People, Buildings2 } from 'iconsax-react'
+import { CalendarTick, CloseCircle, People, Buildings2 } from 'iconsax-react'
 import { appTitle, nav, tabs } from '../../content/strings'
 import { colors } from '../../theme'
 
@@ -7,16 +7,36 @@ const iconSize = 20
 const iconColorActive = colors.primary
 const iconColorInactive = colors.textMuted
 
-export default function Sidebar() {
+export default function Sidebar({ open = false, onClose }) {
   return (
-    <aside
-      className="fixed left-0 top-0 z-10 flex h-full w-56 flex-col bg-background"
-      aria-label="Main navigation"
-    >
-      <div className="flex h-14 shrink-0 items-center px-4">
-        <span className="text-lg font-semibold text-text">{appTitle}</span>
-      </div>
-      <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
+    <>
+      {/* Overlay when sidebar is open (below lg) */}
+      <div
+        role="presentation"
+        onClick={onClose}
+        className={`fixed inset-0 z-10 bg-text/50 backdrop-blur-sm transition-opacity duration-200 lg:hidden ${
+          open ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        aria-hidden="true"
+      />
+      <aside
+        className={`fixed left-0 top-0 z-20 flex h-full w-56 flex-col bg-background shadow-xl transition-transform duration-200 ease-out lg:translate-x-0 lg:shadow-none ${
+          open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+        aria-label="Main navigation"
+      >
+        <div className="flex h-14 shrink-0 items-center justify-between gap-2 px-4">
+          <span className="text-lg font-semibold text-text truncate">{appTitle}</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex shrink-0 items-center justify-center rounded-xl p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-text lg:hidden"
+            aria-label="Close menu"
+          >
+            <CloseCircle size={22} className="shrink-0" />
+          </button>
+        </div>
+        <nav className="flex flex-1 flex-col gap-1 px-3 py-4" onClick={onClose}>
         <NavLink
           to="/employees"
           className={({ isActive }) =>
@@ -64,5 +84,6 @@ export default function Sidebar() {
         </NavLink>
       </nav>
     </aside>
+    </>
   )
 }

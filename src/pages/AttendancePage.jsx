@@ -20,7 +20,7 @@ export default function AttendancePage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="flex items-center gap-2 text-2xl font-semibold text-text">
+      <h2 className="flex items-center gap-2 text-xl font-semibold text-text sm:text-2xl">
         <CalendarTick size={28} color={colors.primary} className="shrink-0" />
         {strings.title}
       </h2>

@@ -36,16 +36,16 @@ export default function Modal({
         aria-hidden="true"
       />
       <div
-        className="relative w-full max-w-md rounded-2xl bg-background shadow-xl"
+        className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-background shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <h2 id="modal-title" className="border-b border-divider px-6 py-4 text-lg font-semibold text-text">
+          <h2 id="modal-title" className="sticky top-0 border-b border-divider bg-background px-4 py-3 text-lg font-semibold text-text sm:px-6 sm:py-4">
             {title}
           </h2>
         )}
-        <div className="px-6 py-4 text-sm text-text">{children}</div>
-        {footer && <div className="flex justify-end gap-2 border-t border-divider px-6 py-4">{footer}</div>}
+        <div className="px-4 py-3 text-sm text-text sm:px-6 sm:py-4">{children}</div>
+        {footer && <div className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-divider bg-background px-4 py-3 sm:px-6 sm:py-4">{footer}</div>}
       </div>
     </div>
   )

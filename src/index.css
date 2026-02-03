@@ -45,7 +45,13 @@
   }
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   background-color: var(--color-surface);
   color: var(--color-text);
+  min-height: 100vh;
+  min-height: 100dvh;
 }
