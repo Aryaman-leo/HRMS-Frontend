@@ -6,7 +6,9 @@ import { colors } from '../theme'
 import { dashboard as strings } from '../content/strings'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
-import LoadingSpinner from '../components/ui/LoadingSpinner'
+import Skeleton from '../components/ui/Skeleton'
+import SkeletonCard from '../components/ui/SkeletonCard'
+import SkeletonTable from '../components/ui/SkeletonTable'
 
 function StatCard({ icon: Icon, label, value, subtext, to, color = colors.primary }) {
   const content = (
@@ -100,9 +102,37 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 py-16">
-        <LoadingSpinner />
-        <span className="text-sm text-text-muted">{strings.loading}</span>
+      <div className="space-y-6 sm:space-y-8">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <Skeleton className="h-8 w-48" />
+        </div>
+        <section>
+          <Skeleton className="mb-3 h-4 w-20" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </section>
+        <section>
+          <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Skeleton className="h-4 w-44" />
+            <Skeleton className="h-10 w-56 rounded-xl" />
+          </div>
+          <div className="max-h-[320px] overflow-hidden rounded-2xl bg-background">
+            <SkeletonTable columnCount={3} rowCount={5} />
+          </div>
+        </section>
+        <section>
+          <Skeleton className="mb-3 h-4 w-24" />
+          <div className="flex flex-wrap gap-3">
+            <Skeleton className="h-12 w-32 rounded-xl" />
+            <Skeleton className="h-12 w-36 rounded-xl" />
+            <Skeleton className="h-12 w-28 rounded-xl" />
+          </div>
+        </section>
       </div>
     )
   }

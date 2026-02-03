@@ -10,6 +10,18 @@ export const nav = {
   employees: 'Employees',
   attendance: 'Attendance',
   departments: 'Departments',
+  adminLogs: 'Admin logs',
+}
+
+export const adminLogs = {
+  title: 'Admin logs',
+  loading: 'Loading…',
+  empty: 'No admin actions recorded yet.',
+  searchPlaceholder: 'Search by action, entity, or details…',
+  time: 'Time',
+  action: 'Action',
+  entity: 'Entity',
+  details: 'Details',
 }
 
 export const dashboard = {

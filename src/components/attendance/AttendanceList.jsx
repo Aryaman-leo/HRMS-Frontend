@@ -5,7 +5,7 @@ import { colors } from '../../theme'
 import { attendance as strings, common } from '../../content/strings'
 import { useToast } from '../../context/ToastContext'
 import Table from '../ui/Table'
-import LoadingSpinner from '../ui/LoadingSpinner'
+import SkeletonTable from '../ui/SkeletonTable'
 import ErrorMessage from '../ui/ErrorMessage'
 import Select from '../ui/Select'
 import DatePicker from '../ui/DatePicker'
@@ -149,9 +149,8 @@ export default function AttendanceList({ refreshTrigger }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl bg-background py-12">
-        <LoadingSpinner />
-        <span className="text-sm text-text-muted">{common.loading}</span>
+      <div className="overflow-hidden rounded-2xl bg-background">
+        <SkeletonTable columnCount={3} rowCount={5} />
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastProvider } from './context/ToastContext'
 import Layout from './components/layout/Layout'
+import AdminLogsPage from './pages/AdminLogsPage'
 import DashboardPage from './pages/DashboardPage'
 import EmployeesPage from './pages/EmployeesPage'
 import AttendancePage from './pages/AttendancePage'
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="employees" element={<EmployeesPage />} />
           <Route path="departments" element={<DepartmentsPage />} />
           <Route path="attendance" element={<AttendancePage />} />
+          <Route path="admin-logs" element={<AdminLogsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

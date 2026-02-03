@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home2, CalendarTick, People, Buildings2 } from 'iconsax-react'
+import { Home2, CalendarTick, People, Buildings2, DocumentText } from 'iconsax-react'
 import { appTitle, nav, tabs } from '../../content/strings'
 import { colors } from '../../theme'
 
@@ -74,6 +74,21 @@ export default function Sidebar() {
             <>
               <CalendarTick size={iconSize} color={isActive ? iconColorActive : iconColorInactive} className="shrink-0" />
               {nav.attendance}
+            </>
+          )}
+        </NavLink>
+        <NavLink
+          to="/admin-logs"
+          className={({ isActive }) =>
+            `flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+              isActive ? 'bg-surface-alt text-primary' : 'text-text-muted hover:bg-surface-alt hover:text-text'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <DocumentText size={iconSize} color={isActive ? iconColorActive : iconColorInactive} className="shrink-0" />
+              {nav.adminLogs}
             </>
           )}
         </NavLink>

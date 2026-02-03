@@ -7,7 +7,7 @@ import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Card from '../ui/Card'
 import DatePicker from '../ui/DatePicker'
-import LoadingSpinner from '../ui/LoadingSpinner'
+import Skeleton from '../ui/Skeleton'
 
 const ICON_PRIMARY = colors.primary
 const ICON_MUTED = colors.textMuted
@@ -143,9 +143,25 @@ export default function MarkAttendanceForm({ onMarked }) {
   if (loadEmployees) {
     return (
       <Card>
-        <div className="flex items-center justify-center gap-2 py-8">
-          <LoadingSpinner />
-          <span className="text-sm text-text-muted">{common.loading}</span>
+        <Skeleton className="mb-1 h-6 w-48" />
+        <Skeleton className="mb-4 h-4 w-full max-w-md" />
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-full rounded-xl" />
+          <Skeleton className="h-10 w-32 rounded-xl" />
+        </div>
+        <div className="mt-6 overflow-hidden rounded-2xl bg-surface-alt">
+          <div className="border-b border-divider px-4 py-3">
+            <div className="flex gap-4">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          </div>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex items-center gap-4 border-t border-divider px-4 py-3">
+              <Skeleton className="h-4 w-36" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+          ))}
         </div>
       </Card>
     )
@@ -269,7 +285,7 @@ export default function MarkAttendanceForm({ onMarked }) {
                         className="cursor-pointer rounded-xl p-2 text-primary transition-colors hover:bg-primary-muted disabled:opacity-50 disabled:pointer-events-none"
                       >
                         {savingRow === id ? (
-                          <LoadingSpinner className="h-5 w-5" />
+                          <Skeleton className="h-5 w-5 rounded" />
                         ) : (
                           <Save2 size={20} color={savedForDate[id] === value ? ICON_MUTED : ICON_PRIMARY} className="shrink-0" />
                         )}

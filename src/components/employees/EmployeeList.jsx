@@ -6,7 +6,7 @@ import { employees as strings, common } from '../../content/strings'
 import Button from '../ui/Button'
 import Table from '../ui/Table'
 import Modal from '../ui/Modal'
-import LoadingSpinner from '../ui/LoadingSpinner'
+import SkeletonTable from '../ui/SkeletonTable'
 import ErrorMessage from '../ui/ErrorMessage'
 
 export default function EmployeeList({ refreshTrigger, onListChange }) {
@@ -59,9 +59,8 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl bg-background py-12">
-        <LoadingSpinner />
-        <span className="text-sm text-text-muted">{common.loading}</span>
+      <div className="overflow-hidden rounded-2xl bg-background">
+        <SkeletonTable columnCount={5} rowCount={5} />
       </div>
     )
   }
@@ -89,8 +88,8 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
               <td className="px-4 py-3 text-sm text-text">{emp.email}</td>
               <td className="px-4 py-3 text-sm text-text">{emp.departmentName}</td>
               <td className="px-4 py-3">
-                <Button variant="danger" type="button" onClick={() => openDeleteModal(emp)} className="inline-flex items-center gap-2">
-                  <Trash size={18} color={colors.danger} className="shrink-0" />
+                <Button variant="danger" type="button" onClick={() => openDeleteModal(emp)} className="inline-flex items-center gap-2 [&_svg]:hover:text-white">
+                  <Trash size={18} color="currentColor" className="shrink-0" />
                   {common.delete}
                 </Button>
               </td>

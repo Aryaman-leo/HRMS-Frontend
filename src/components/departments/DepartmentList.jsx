@@ -6,7 +6,7 @@ import { departments as strings, common } from '../../content/strings'
 import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Table from '../ui/Table'
-import LoadingSpinner from '../ui/LoadingSpinner'
+import SkeletonTable from '../ui/SkeletonTable'
 import ErrorMessage from '../ui/ErrorMessage'
 
 export default function DepartmentList({ refreshTrigger, onListChange }) {
@@ -59,9 +59,8 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl bg-background py-12">
-        <LoadingSpinner />
-        <span className="text-sm text-text-muted">{common.loading}</span>
+      <div className="overflow-hidden rounded-2xl bg-background">
+        <SkeletonTable columnCount={3} rowCount={5} />
       </div>
     )
   }
@@ -167,7 +166,7 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
                     variant="danger"
                     type="button"
                     onClick={() => handleDelete(dept.id)}
-                    className="inline-flex cursor-pointer items-center gap-2 hover:text-white"
+                    className="inline-flex cursor-pointer items-center gap-2 hover:text-white [&_svg]:hover:text-white"
                   >
                     <Trash size={18} color="currentColor" className="shrink-0" />
                     {common.delete}
