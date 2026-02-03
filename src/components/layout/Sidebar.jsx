@@ -13,7 +13,14 @@ export default function Sidebar() {
       className="fixed left-0 top-0 z-10 flex h-full w-56 flex-col bg-background"
       aria-label="Main navigation"
     >
-      <div className="flex h-14 shrink-0 items-center px-4">
+      <div className="flex h-14 shrink-0 items-center gap-3 px-4">
+        <img
+          src="/logo.svg"
+          alt=""
+          className="h-9 w-9 shrink-0 rounded-lg object-contain"
+          width="36"
+          height="36"
+        />
         <span className="text-lg font-semibold text-text">{appTitle}</span>
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
