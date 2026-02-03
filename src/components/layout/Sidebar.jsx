@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home2, CalendarTick, People, Buildings2, DocumentText } from 'iconsax-react'
+import { Home2, CalendarTick, People, Buildings2, DocumentText, Code1 } from 'iconsax-react'
 import { appTitle, nav, tabs } from '../../content/strings'
 import { colors } from '../../theme'
 
@@ -87,7 +87,7 @@ export default function Sidebar() {
         >
           {({ isActive }) => (
             <>
-              <DocumentText size={iconSize} color={isActive ? iconColorActive : iconColorInactive} className="shrink-0" />
+              <Code1 size={iconSize} color={isActive ? iconColorActive : iconColorInactive} className="shrink-0" />
               {nav.adminLogs}
             </>
           )}

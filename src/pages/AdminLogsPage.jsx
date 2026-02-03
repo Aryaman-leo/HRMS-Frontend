@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { DocumentText } from 'iconsax-react'
+import { Code1, DocumentText } from 'iconsax-react'
 import { api } from '../api/client'
 import { colors } from '../theme'
 import { adminLogs as strings } from '../content/strings'
@@ -101,7 +101,7 @@ export default function AdminLogsPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <h2 className="flex items-center gap-2 text-xl font-semibold text-text sm:text-2xl">
-        <DocumentText size={28} color={colors.primary} className="shrink-0" />
+        <Code1 size={28} color={colors.primary} className="shrink-0" />
         {strings.title}
       </h2>
 

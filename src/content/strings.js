@@ -37,6 +37,7 @@ export const dashboard = {
   goToEmployees: 'Employees',
   goToDepartments: 'Departments',
   goToAttendance: 'Attendance',
+  goToAdminLogs: 'Admin logs',
   attendanceSummary: 'Present days per employee',
   searchPlaceholder: 'Search by name or ID',
   employee: 'Employee',

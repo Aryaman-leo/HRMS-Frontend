@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Home2, People, Buildings2, CalendarTick, TickCircle, CloseCircle } from 'iconsax-react'
+import { Home2, People, Buildings2, CalendarTick, TickCircle, CloseCircle, Code1 } from 'iconsax-react'
 import { api } from '../api/client'
 import { colors } from '../theme'
 import { dashboard as strings } from '../content/strings'
@@ -146,6 +146,7 @@ export default function DashboardPage() {
             <Skeleton className="h-12 w-32 rounded-xl" />
             <Skeleton className="h-12 w-36 rounded-xl" />
             <Skeleton className="h-12 w-28 rounded-xl" />
+            <Skeleton className="h-12 w-28 rounded-xl" />
           </div>
         </section>
       </div>
@@ -265,6 +266,13 @@ export default function DashboardPage() {
           >
             <CalendarTick size={18} color={colors.primary} className="shrink-0" />
             {strings.goToAttendance}
+          </Link>
+          <Link
+            to="/admin-logs"
+            className="inline-flex items-center gap-2 rounded-xl bg-background px-4 py-3 text-sm font-medium text-text shadow-sm ring-1 ring-divider transition-colors hover:bg-surface-alt hover:ring-primary/30"
+          >
+            <Code1 size={18} color={colors.primary} className="shrink-0" />
+            {strings.goToAdminLogs}
           </Link>
         </div>
       </section>
