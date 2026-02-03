@@ -3,7 +3,6 @@ import { Add, Trash } from 'iconsax-react'
 import { api } from '../../api/client'
 import { colors } from '../../theme'
 import { employees as strings, common } from '../../content/strings'
-import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Table from '../ui/Table'
 import Modal from '../ui/Modal'
@@ -11,7 +10,6 @@ import LoadingSpinner from '../ui/LoadingSpinner'
 import ErrorMessage from '../ui/ErrorMessage'
 
 export default function EmployeeList({ refreshTrigger, onListChange }) {
-  const { toast } = useToast()
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -25,9 +23,7 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
       setList(Array.isArray(data) ? data : data?.employees ?? data?.data ?? [])
       onListChange?.()
     } catch (err) {
-      const msg = err.message || common.error
-      setError(msg)
-      toast.error(msg)
+      setError(err.message || common.error)
       setList([])
     } finally {
       setLoading(false)
@@ -44,11 +40,8 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
       setList((prev) => prev.filter((e) => e.id !== id))
       setDeleteTarget(null)
       onListChange?.()
-      toast.success(strings.deleteSuccess)
     } catch (err) {
-      const msg = err.message || common.error
-      setError(msg)
-      toast.error(msg)
+      setError(err.message || common.error)
     }
   }
 
@@ -127,16 +120,16 @@ export default function EmployeeList({ refreshTrigger, onListChange }) {
           <div className="space-y-3">
             <p>Are you sure you want to delete this employee? This cannot be undone.</p>
             <dl className="rounded-xl bg-surface-alt p-4 text-sm space-y-2">
-              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
-                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.employeeId}</dt>
+              <div className="flex gap-2">
+                <dt className="min-w-32 font-medium text-text-muted">{strings.employeeId}</dt>
                 <dd className="text-text">{deleteTarget.employeeId}</dd>
               </div>
-              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
-                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.fullName}</dt>
+              <div className="flex gap-2">
+                <dt className="min-w-32 font-medium text-text-muted">{strings.fullName}</dt>
                 <dd className="text-text">{deleteTarget.fullName}</dd>
               </div>
-              <div className="flex flex-wrap gap-x-2 gap-y-0 sm:flex-nowrap">
-                <dt className="min-w-24 shrink-0 font-medium text-text-muted sm:min-w-32">{strings.department}</dt>
+              <div className="flex gap-2">
+                <dt className="min-w-32 font-medium text-text-muted">{strings.department}</dt>
                 <dd className="text-text">{deleteTarget.departmentName}</dd>
               </div>
             </dl>

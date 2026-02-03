@@ -10,7 +10,7 @@ import Select from '../ui/Select'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export default function EmployeeForm({ onAdded }) {
+export default function EmployeeForm({ onAdded, extraActions }) {
   const { toast } = useToast()
   const [employeeId, setEmployeeId] = useState('')
   const [fullName, setFullName] = useState('')
@@ -168,11 +168,17 @@ export default function EmployeeForm({ onAdded }) {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button type="submit" disabled={loading} className="inline-flex items-center gap-2">
             <Add size={18} color={colors.background} className="shrink-0" />
             {loading ? common.loading : common.add}
           </Button>
+          {extraActions && (
+            <>
+              <span className="text-sm text-text-muted">or</span>
+              {extraActions}
+            </>
+          )}
         </div>
       </form>
     </Card>

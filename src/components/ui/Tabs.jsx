@@ -6,7 +6,7 @@ const iconColorInactive = colors.textMuted
 
 export default function Tabs({ tabs: tabList, activeTab, onChange, className = '' }) {
   return (
-    <div role="tablist" className={`flex flex-wrap gap-1 rounded-xl bg-surface-alt p-1 ${className}`.trim()}>
+    <div role="tablist" className={`flex gap-1 rounded-xl bg-surface-alt p-1 ${className}`.trim()}>
       {tabList.map((tab) => {
         const isActive = activeTab === tab.value
         const Icon = tab.icon

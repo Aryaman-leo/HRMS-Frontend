@@ -126,14 +126,14 @@ export default function AttendanceList({ refreshTrigger }) {
       {error && (
         <ErrorMessage message={error} onRetry={fetchAttendance} onDismiss={() => setError(null)} />
       )}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-start px-4 justify-between gap-4">
         <h3 className="flex items-center gap-2 text-lg font-medium text-text">
           <DocumentText size={20} color={colors.textMuted} className="shrink-0" />
           {strings.records}
         </h3>
-        <div className="flex flex-wrap items-end gap-3 sm:gap-4">
+        <div className="flex flex-wrap items-end gap-4">
           {employeeOptions.length > 0 && (
-            <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[200px]">
+            <div className="flex min-w-[200px] items-center gap-2">
               <div className="relative min-w-0 flex-1">
                 <Select
                   id="attendance-filter-employee"
@@ -156,7 +156,7 @@ export default function AttendanceList({ refreshTrigger }) {
               )}
             </div>
           )}
-          <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[160px]">
+          <div className="flex min-w-[160px] items-center gap-2">
             <label htmlFor="attendance-filter-from" className="shrink-0 text-sm font-medium text-text">
               {strings.filterByDateFrom}
             </label>
@@ -168,7 +168,7 @@ export default function AttendanceList({ refreshTrigger }) {
               maxDate={todayISO}
             />
           </div>
-          <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[160px]">
+          <div className="flex min-w-[160px] items-center gap-2">
             <label htmlFor="attendance-filter-to" className="shrink-0 text-sm font-medium text-text">
               {strings.filterByDateTo}
             </label>

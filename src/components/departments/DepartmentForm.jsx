@@ -7,7 +7,7 @@ import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Card from '../ui/Card'
 
-export default function DepartmentForm({ onAdded }) {
+export default function DepartmentForm({ onAdded, extraActions }) {
   const { toast } = useToast()
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
@@ -66,11 +66,17 @@ export default function DepartmentForm({ onAdded }) {
             <p className="mt-1 text-sm text-danger">{fieldErrors.name}</p>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button type="submit" disabled={loading} className="inline-flex cursor-pointer items-center gap-2">
             <Add size={18} color={colors.background} className="shrink-0" />
             {loading ? common.loading : common.add}
           </Button>
+          {extraActions && (
+            <>
+              <span className="text-sm text-text-muted">or</span>
+              {extraActions}
+            </>
+          )}
         </div>
       </form>
     </Card>

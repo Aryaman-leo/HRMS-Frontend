@@ -34,24 +34,7 @@
   }
 }
 
-@keyframes dropdown-open {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-html {
-  -webkit-tap-highlight-color: transparent;
-}
-
 body {
   background-color: var(--color-surface);
   color: var(--color-text);
-  min-height: 100vh;
-  min-height: 100dvh;
 }

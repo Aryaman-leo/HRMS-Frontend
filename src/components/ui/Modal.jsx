@@ -45,7 +45,11 @@ export default function Modal({
           </h2>
         )}
         <div className="px-4 py-3 text-sm text-text sm:px-6 sm:py-4">{children}</div>
-        {footer && <div className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-divider bg-background px-4 py-3 sm:px-6 sm:py-4">{footer}</div>}
+        {footer && (
+          <div className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-divider bg-background px-4 py-3 sm:px-6 sm:py-4">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 export default function Table({ columns, children, empty, emptyAction, isEmpty }) {
   const showEmpty = isEmpty && (empty || emptyAction)
   return (
-    <div className="overflow-x-auto rounded-2xl bg-background">
+    <div className="overflow-hidden rounded-2xl bg-background">
       {!showEmpty && (
         <table className="w-full min-w-[400px] border-collapse">
           <thead>

@@ -35,6 +35,9 @@ export const employees = {
   departmentPlaceholder: 'Select department',
   actions: 'Actions',
   noDepartments: 'Add departments first, then add employees.',
+  importCsv: 'Import CSV',
+  importCsvHint: 'CSV: employee_id, full_name, email, department_id or department_name',
+  bulkResult: (created, failed) => (failed > 0 ? `Created ${created}, skipped ${failed} (duplicates/invalid).` : `Created ${created} employee(s).`),
 }
 
 export const departments = {
@@ -53,6 +56,9 @@ export const departments = {
   employeeCount: (n) => (n === 1 ? '1 employee' : `${n} employees`),
   expand: 'Expand',
   collapse: 'Collapse',
+  importCsv: 'Import CSV',
+  importCsvHint: 'CSV with a "name" column (or first column = department name)',
+  bulkResult: (created, failed) => (failed > 0 ? `Created ${created}, skipped ${failed} (duplicates).` : `Created ${created} department(s).`),
 }
 
 export const attendance = {

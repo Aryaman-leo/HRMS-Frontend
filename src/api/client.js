@@ -15,14 +15,15 @@ function buildUrl(path, searchParams = {}) {
 
 async function request(path, options = {}, searchParams = {}) {
   const url = buildUrl(path, searchParams)
+  const isFormData = options.body instanceof FormData
   const config = {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...options.headers,
     },
   }
-  if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+  if (options.body && typeof options.body === 'object' && !isFormData) {
     config.body = JSON.stringify(options.body)
   }
   const response = await fetch(url, config)

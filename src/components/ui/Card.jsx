@@ -1,6 +1,6 @@
 export default function Card({ children, className = '' }) {
   return (
-    <div className={`rounded-2xl bg-background p-4 sm:p-6 ${className}`.trim()}>
+    <div className={`rounded-2xl bg-background p-6 ${className}`.trim()}>
       {children}
     </div>
   )
