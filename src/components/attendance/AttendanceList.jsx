@@ -17,12 +17,23 @@ export default function AttendanceList({ refreshTrigger }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [filterEmployeeId, setFilterEmployeeId] = useState('')
+  const [filterStatus, setFilterStatus] = useState('all')
   const [filterDateFrom, setFilterDateFrom] = useState('')
   const [filterDateTo, setFilterDateTo] = useState('')
   const [appliedEmployeeId, setAppliedEmployeeId] = useState('')
+  const [appliedFilterStatus, setAppliedFilterStatus] = useState('all')
   const [appliedDateFrom, setAppliedDateFrom] = useState('')
   const [appliedDateTo, setAppliedDateTo] = useState('')
   const [dateError, setDateError] = useState('')
+
+  const statusOptions = useMemo(
+    () => [
+      { value: 'all', label: strings.filterStatusAll },
+      { value: 'Present', label: strings.statusPresent },
+      { value: 'Absent', label: strings.statusAbsent },
+    ],
+    []
+  )
 
   const todayISO = useMemo(() => {
     const t = new Date()
@@ -33,7 +44,10 @@ export default function AttendanceList({ refreshTrigger }) {
     setLoading(true)
     setError(null)
     try {
-      const data = await api.get('/api/attendance')
+      const params = {}
+      if (appliedDateFrom) params.date_from = appliedDateFrom
+      if (appliedDateTo) params.date_to = appliedDateTo
+      const data = await api.get('/api/attendance', params)
       setList(Array.isArray(data) ? data : data?.attendance ?? data?.records ?? data?.data ?? [])
     } catch (err) {
       const msg = err.message || common.error
@@ -43,7 +57,7 @@ export default function AttendanceList({ refreshTrigger }) {
     } finally {
       setLoading(false)
     }
-  }, [toast])
+  }, [toast, appliedDateFrom, appliedDateTo])
 
   useEffect(() => {
     fetchAttendance()
@@ -68,6 +82,11 @@ export default function AttendanceList({ refreshTrigger }) {
     if (appliedEmployeeId) {
       result = result.filter((r) => (r.employeeId ?? r.employee_id) === appliedEmployeeId)
     }
+    if (appliedFilterStatus && appliedFilterStatus !== 'all') {
+      result = result.filter(
+        (r) => (r.status || '').toLowerCase() === appliedFilterStatus.toLowerCase()
+      )
+    }
     if (appliedDateFrom) {
       result = result.filter((r) => {
         const d = r.date ?? r.attendance_date ?? ''
@@ -81,7 +100,7 @@ export default function AttendanceList({ refreshTrigger }) {
       })
     }
     return result
-  }, [list, appliedEmployeeId, appliedDateFrom, appliedDateTo])
+  }, [list, appliedEmployeeId, appliedFilterStatus, appliedDateFrom, appliedDateTo])
 
   const handleFromChange = (value) => {
     setFilterDateFrom(value)
@@ -102,9 +121,25 @@ export default function AttendanceList({ refreshTrigger }) {
     }
     setDateError('')
     setAppliedEmployeeId(filterEmployeeId)
+    setAppliedFilterStatus(filterStatus)
     setAppliedDateFrom(filterDateFrom)
     setAppliedDateTo(filterDateTo)
   }
+
+  const handleClearFilters = () => {
+    setFilterEmployeeId('')
+    setFilterStatus('all')
+    setFilterDateFrom('')
+    setFilterDateTo('')
+    setAppliedEmployeeId('')
+    setAppliedFilterStatus('all')
+    setAppliedDateFrom('')
+    setAppliedDateTo('')
+    setDateError('')
+  }
+
+  const hasActiveFilters =
+    appliedEmployeeId || appliedFilterStatus !== 'all' || appliedDateFrom || appliedDateTo
 
   const columns = [
     { key: 'date', label: strings.dateColumn },
@@ -126,14 +161,22 @@ export default function AttendanceList({ refreshTrigger }) {
       {error && (
         <ErrorMessage message={error} onRetry={fetchAttendance} onDismiss={() => setError(null)} />
       )}
-      <div className="flex flex-col items-start px-4 justify-between gap-4">
-        <h3 className="flex items-center gap-2 text-lg font-medium text-text">
-          <DocumentText size={20} color={colors.textMuted} className="shrink-0" />
-          {strings.records}
-        </h3>
-        <div className="flex flex-wrap items-end gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="flex items-center gap-2 text-lg font-medium text-text">
+            <DocumentText size={20} color={colors.textMuted} className="shrink-0" />
+            {strings.records}
+          </h3>
+          {hasActiveFilters && (
+            <Button type="button" variant="secondary" onClick={handleClearFilters}>
+              {strings.clearFilters}
+            </Button>
+          )}
+        </div>
+        <p className="text-sm text-text-muted">{strings.filterByDateRange}</p>
+        <div className="flex flex-wrap items-end gap-3 sm:gap-4">
           {employeeOptions.length > 0 && (
-            <div className="flex min-w-[200px] items-center gap-2">
+            <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[200px]">
               <div className="relative min-w-0 flex-1">
                 <Select
                   id="attendance-filter-employee"
@@ -156,7 +199,20 @@ export default function AttendanceList({ refreshTrigger }) {
               )}
             </div>
           )}
-          <div className="flex min-w-[160px] items-center gap-2">
+          <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[140px]">
+            <label htmlFor="attendance-filter-status" className="shrink-0 text-sm font-medium text-text">
+              {strings.filterByStatus}
+            </label>
+            <Select
+              id="attendance-filter-status"
+              value={filterStatus}
+              onChange={setFilterStatus}
+              options={statusOptions}
+              placeholder={strings.filterStatusAll}
+              aria-label={strings.filterByStatus}
+            />
+          </div>
+          <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[160px]">
             <label htmlFor="attendance-filter-from" className="shrink-0 text-sm font-medium text-text">
               {strings.filterByDateFrom}
             </label>
@@ -168,7 +224,7 @@ export default function AttendanceList({ refreshTrigger }) {
               maxDate={todayISO}
             />
           </div>
-          <div className="flex min-w-[160px] items-center gap-2">
+          <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:min-w-[160px]">
             <label htmlFor="attendance-filter-to" className="shrink-0 text-sm font-medium text-text">
               {strings.filterByDateTo}
             </label>

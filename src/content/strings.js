@@ -6,9 +6,31 @@
 export const appTitle = 'HRMS Lite'
 
 export const nav = {
+  dashboard: 'Dashboard',
   employees: 'Employees',
   attendance: 'Attendance',
   departments: 'Departments',
+}
+
+export const dashboard = {
+  title: 'Dashboard',
+  loading: 'Loading…',
+  overview: 'Overview',
+  totalEmployees: 'Total employees',
+  totalDepartments: 'Total departments',
+  todayPresent: 'Present today',
+  todayAbsent: 'Absent today',
+  today: 'Today',
+  quickLinks: 'Quick links',
+  goToEmployees: 'Employees',
+  goToDepartments: 'Departments',
+  goToAttendance: 'Attendance',
+  attendanceSummary: 'Present days per employee',
+  searchPlaceholder: 'Search by name or ID',
+  employee: 'Employee',
+  presentDays: 'Present days',
+  absentDays: 'Absent days',
+  noData: 'No data yet.',
 }
 
 export const tabs = {
@@ -87,11 +109,15 @@ export const attendance = {
   usingSampleRecords: 'Showing sample attendance records. Connect the backend to see live data.',
   filterByEmployee: 'View records for',
   allEmployees: 'All employees',
+  filterByStatus: 'Status',
+  filterStatusAll: 'All',
+  filterByDateRange: 'Filter by date range',
   filterByDateFrom: 'From date',
   filterByDateTo: 'To date',
   filterDatePlaceholder: 'All dates',
   dateFromAfterTo: 'From date must be before or equal to To date.',
   dateFuture: 'Future dates cannot be selected.',
+  clearFilters: 'Clear filters',
 }
 
 export const common = {
