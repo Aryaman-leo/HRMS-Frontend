@@ -1,0 +1,20 @@
+import { useState } from 'react'
+import { People } from 'iconsax-react'
+import { colors } from '../theme'
+import EmployeeForm from '../components/employees/EmployeeForm'
+import EmployeeList from '../components/employees/EmployeeList'
+import { employees as strings } from '../content/strings'
+
+export default function EmployeesPage() {
+  const [refreshKey, setRefreshKey] = useState(0)
+  return (
+    <div className="space-y-8">
+      <h2 className="flex items-center gap-2 text-2xl font-semibold text-text">
+        <People size={28} color={colors.primary} className="shrink-0" />
+        {strings.title}
+      </h2>
+      <EmployeeForm onAdded={() => setRefreshKey((k) => k + 1)} />
+      <EmployeeList refreshTrigger={refreshKey} />
+    </div>
+  )
+}

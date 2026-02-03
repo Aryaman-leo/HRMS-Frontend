@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4a7c59;
+  --color-primary-light: #6b9b76;
+  --color-primary-dark: #3d6649;
+  --color-primary-muted: #e2ebe5;
+  --color-secondary: #5c6b73;
+  --color-surface: #f8faf8;
+  --color-surface-alt: #eef2ef;
+  /* Subtle divider color for minimal separators */
+  --color-divider: #f2f6f3;
+  --color-background: #ffffff;
+  --color-text: #1a2421;
+  --color-text-muted: #5c6b73;
+  --color-success: #4a7c59;
+  --color-danger: #b85450;
+  --color-danger-light: #e8d4d3;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+@keyframes accordion-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdown-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
