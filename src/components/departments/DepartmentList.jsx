@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Add, ArrowDown2, ArrowRight2, Trash } from 'iconsax-react'
 import { api } from '../../api/client'
 import { colors } from '../../theme'
@@ -6,6 +6,7 @@ import { departments as strings, common } from '../../content/strings'
 import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Table from '../ui/Table'
+import Pagination, { DEFAULT_PAGE_SIZE } from '../ui/Pagination'
 import SkeletonTable from '../ui/SkeletonTable'
 import ErrorMessage from '../ui/ErrorMessage'
 
@@ -15,6 +16,8 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [expandedIds, setExpandedIds] = useState(new Set())
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   function toggleExpanded(id) {
     setExpandedIds((prev) => {
@@ -48,6 +51,7 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
     try {
       await api.delete(`/api/departments/${id}`)
       setList((prev) => prev.filter((d) => d.id !== id))
+      setPage((p) => Math.max(1, p - 1))
       onListChange?.()
       toast.success(strings.deleteSuccess)
     } catch (err) {
@@ -56,6 +60,11 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
       toast.error(msg)
     }
   }
+
+  const paginatedList = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return list.slice(start, start + pageSize)
+  }, [list, page, pageSize])
 
   if (loading) {
     return (
@@ -70,22 +79,23 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
       {error && (
         <ErrorMessage message={error} onRetry={fetchDepartments} onDismiss={() => setError(null)} />
       )}
-      <Table
-        columns={[
-          { key: 'name', label: strings.name },
-          { key: 'employees', label: strings.employees },
-          { key: 'actions', label: strings.actions },
-        ]}
-        empty={strings.empty}
-        emptyAction={
-          <Button variant="primary" className="inline-flex cursor-pointer items-center gap-2">
-            <Add size={18} color={colors.background} className="shrink-0" />
-            {strings.emptyAction}
-          </Button>
-        }
-        isEmpty={list.length === 0}
-      >
-        {list.map((dept) => {
+      <div className="overflow-hidden rounded-2xl border border-divider bg-background">
+        <Table
+          columns={[
+            { key: 'name', label: strings.name },
+            { key: 'employees', label: strings.employees },
+            { key: 'actions', label: strings.actions },
+          ]}
+          empty={strings.empty}
+          emptyAction={
+            <Button variant="primary" className="inline-flex cursor-pointer items-center gap-2">
+              <Add size={18} color={colors.background} className="shrink-0" />
+              {strings.emptyAction}
+            </Button>
+          }
+          isEmpty={list.length === 0}
+        >
+          {paginatedList.map((dept) => {
           const isExpanded = expandedIds.has(dept.id)
           const employeeCount = dept.employees?.length ?? 0
           return (
@@ -175,7 +185,15 @@ export default function DepartmentList({ refreshTrigger, onListChange }) {
               </tr>
           )
         })}
-      </Table>
+        </Table>
+        <Pagination
+          currentPage={page}
+          totalItems={list.length}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
+      </div>
     </div>
   )
 }

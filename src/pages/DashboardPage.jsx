@@ -6,6 +6,7 @@ import { colors } from '../theme'
 import { dashboard as strings } from '../content/strings'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
+import Pagination, { DEFAULT_PAGE_SIZE } from '../components/ui/Pagination'
 import Skeleton from '../components/ui/Skeleton'
 import SkeletonCard from '../components/ui/SkeletonCard'
 import SkeletonTable from '../components/ui/SkeletonTable'
@@ -43,6 +44,8 @@ export default function DashboardPage() {
   })
   const [summary, setSummary] = useState([])
   const [summarySearch, setSummarySearch] = useState('')
+  const [summaryPage, setSummaryPage] = useState(1)
+  const [summaryPageSize, setSummaryPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   const filteredSummary = useMemo(() => {
     if (!summarySearch.trim()) return summary
@@ -53,6 +56,18 @@ export default function DashboardPage() {
       return name.includes(q) || id.includes(q)
     })
   }, [summary, summarySearch])
+
+  const paginatedSummary = useMemo(() => {
+    const start = (summaryPage - 1) * summaryPageSize
+    return filteredSummary.slice(start, start + summaryPageSize)
+  }, [filteredSummary, summaryPage, summaryPageSize])
+
+  useEffect(() => {
+    setSummaryPage(1)
+  }, [summarySearch])
+  useEffect(() => {
+    setSummaryPage(1)
+  }, [summaryPageSize])
 
   useEffect(() => {
     let cancelled = false
@@ -121,7 +136,7 @@ export default function DashboardPage() {
             <Skeleton className="h-4 w-44" />
             <Skeleton className="h-10 w-56 rounded-xl" />
           </div>
-          <div className="max-h-[320px] overflow-hidden rounded-2xl bg-background">
+          <div className="overflow-hidden rounded-2xl bg-background">
             <SkeletonTable columnCount={3} rowCount={5} />
           </div>
         </section>
@@ -190,7 +205,7 @@ export default function DashboardPage() {
             aria-label={strings.searchPlaceholder}
           />
         </div>
-        <div className="max-h-[320px] overflow-auto rounded-2xl bg-background">
+        <div className="overflow-hidden rounded-2xl border border-divider bg-background">
           <Table
             columns={[
               { key: 'employee', label: strings.employee },
@@ -200,7 +215,7 @@ export default function DashboardPage() {
             empty={strings.noData}
             isEmpty={filteredSummary.length === 0}
           >
-            {filteredSummary.map((row) => (
+            {paginatedSummary.map((row) => (
               <tr key={row.employeeId ?? row.employee_id} className="border-t border-divider">
                 <td className="px-4 py-3 text-sm text-text">
                   <div>
@@ -217,6 +232,13 @@ export default function DashboardPage() {
               </tr>
             ))}
           </Table>
+          <Pagination
+            currentPage={summaryPage}
+            totalItems={filteredSummary.length}
+            pageSize={summaryPageSize}
+            onPageChange={setSummaryPage}
+            onPageSizeChange={setSummaryPageSize}
+          />
         </div>
       </section>
 

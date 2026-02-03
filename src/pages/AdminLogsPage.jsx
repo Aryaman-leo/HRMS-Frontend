@@ -4,6 +4,7 @@ import { api } from '../api/client'
 import { colors } from '../theme'
 import { adminLogs as strings } from '../content/strings'
 import Table from '../components/ui/Table'
+import Pagination, { DEFAULT_PAGE_SIZE } from '../components/ui/Pagination'
 import Skeleton from '../components/ui/Skeleton'
 import SkeletonTable from '../components/ui/SkeletonTable'
 import ErrorMessage from '../components/ui/ErrorMessage'
@@ -26,6 +27,8 @@ export default function AdminLogsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   useEffect(() => {
     let cancelled = false
@@ -66,6 +69,18 @@ export default function AdminLogsPage() {
     })
   }, [list, search])
 
+  const paginatedList = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredList.slice(start, start + pageSize)
+  }, [filteredList, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search])
+  useEffect(() => {
+    setPage(1)
+  }, [pageSize])
+
   if (loading) {
     return (
       <div className="space-y-6 sm:space-y-8">
@@ -75,7 +90,7 @@ export default function AdminLogsPage() {
         </div>
         <div className="flex flex-col gap-4">
           <Skeleton className="h-10 w-full max-w-sm rounded-xl" />
-          <div className="max-h-[480px] overflow-hidden rounded-2xl bg-background">
+          <div className="overflow-hidden rounded-2xl bg-background">
             <SkeletonTable columnCount={4} rowCount={6} />
           </div>
         </div>
@@ -107,7 +122,7 @@ export default function AdminLogsPage() {
           className="w-full max-w-sm rounded-xl border border-divider bg-background px-3 py-2 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           aria-label="Search logs"
         />
-        <div className="max-h-[480px] overflow-auto rounded-2xl bg-background">
+        <div className="overflow-hidden rounded-2xl border border-divider bg-background">
           <Table
             columns={[
               { key: 'time', label: strings.time },
@@ -118,7 +133,7 @@ export default function AdminLogsPage() {
             empty={strings.empty}
             isEmpty={filteredList.length === 0}
           >
-            {filteredList.map((log) => (
+            {paginatedList.map((log) => (
               <tr key={log.id} className="border-t border-divider">
                 <td className="whitespace-nowrap px-4 py-3 text-sm text-text-muted">
                   {formatLogTime(log.createdAt ?? log.created_at)}
@@ -134,6 +149,13 @@ export default function AdminLogsPage() {
               </tr>
             ))}
           </Table>
+          <Pagination
+            currentPage={page}
+            totalItems={filteredList.length}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
         </div>
       </div>
     </div>

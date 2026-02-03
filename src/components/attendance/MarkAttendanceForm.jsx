@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
-import { Calendar, Save2 } from 'iconsax-react'
+import { useState, useEffect, useMemo } from 'react'
+import { Calendar, Save2, SearchNormal1 } from 'iconsax-react'
 import { api } from '../../api/client'
 import { colors } from '../../theme'
 import { attendance as strings, common, validation } from '../../content/strings'
+import { employees as empStrings } from '../../content/strings'
 import { useToast } from '../../context/ToastContext'
 import Button from '../ui/Button'
 import Card from '../ui/Card'
 import DatePicker from '../ui/DatePicker'
+import Pagination, { DEFAULT_PAGE_SIZE } from '../ui/Pagination'
 import Skeleton from '../ui/Skeleton'
 
 const ICON_PRIMARY = colors.primary
@@ -25,6 +27,9 @@ export default function MarkAttendanceForm({ onMarked }) {
   const [loadingAttendance, setLoadingAttendance] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   useEffect(() => {
     let cancelled = false
@@ -71,6 +76,28 @@ export default function MarkAttendanceForm({ onMarked }) {
     })()
     return () => { cancelled = true }
   }, [date, loadEmployees])
+
+  const filteredEmployees = useMemo(() => {
+    const q = (searchQuery || '').trim().toLowerCase()
+    if (!q) return employees
+    return employees.filter((emp) => {
+      const id = (emp.employeeId ?? emp.employee_id ?? '').toLowerCase()
+      const name = (emp.fullName ?? emp.full_name ?? '').toLowerCase()
+      return id.includes(q) || name.includes(q)
+    })
+  }, [employees, searchQuery])
+
+  const paginatedEmployees = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredEmployees.slice(start, start + pageSize)
+  }, [filteredEmployees, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [searchQuery])
+  useEffect(() => {
+    setPage(1)
+  }, [pageSize])
 
   const rowsWithStatus = Object.entries(rowStatus).filter(([, s]) => s && s !== '')
   const hasDirtyRows = rowsWithStatus.some(
@@ -216,24 +243,45 @@ export default function MarkAttendanceForm({ onMarked }) {
             {loading ? common.loading : strings.saveAttendance}
           </Button>
         </div>
-        <div className="overflow-x-auto rounded-2xl bg-surface-alt">
-          <table className="w-full min-w-[400px] border-collapse">
-            <thead>
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-text-muted">
-                  {strings.employeeColumn}
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-text-muted">
-                  {strings.statusColumn}
-                </th>
-                <th className="w-12 px-4 py-3 text-right text-sm font-medium text-text-muted" aria-label="Save" />
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((emp) => {
-                const id = emp.employeeId
-                const name = emp.fullName 
-                const departmentName = emp.departmentName         
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <label htmlFor="mark-attendance-search" className="sr-only">
+            {empStrings.searchPlaceholder}
+          </label>
+          <div className="relative flex-1 sm:max-w-xs">
+            <SearchNormal1
+              size={18}
+              color={colors.textMuted}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 shrink-0"
+            />
+            <input
+              id="mark-attendance-search"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={empStrings.searchPlaceholder}
+              aria-label={empStrings.searchPlaceholder}
+              className="w-full rounded-xl border border-divider bg-background py-2 pl-9 pr-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+        </div>
+        <div className="overflow-hidden rounded-2xl border border-divider bg-surface-alt">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[400px] border-collapse">
+              <thead>
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-text-muted">
+                    {strings.employeeColumn}
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-text-muted">
+                    {strings.statusColumn}
+                  </th>
+                  <th className="w-12 px-4 py-3 text-right text-sm font-medium text-text-muted" aria-label="Save" />
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedEmployees.map((emp) => {
+                const id = emp.employeeId ?? emp.employee_id
+                const name = emp.fullName ?? emp.full_name
                 const value = rowStatus[id] ?? ''
                 return (
                   <tr key={id} className="border-t border-divider">
@@ -294,8 +342,16 @@ export default function MarkAttendanceForm({ onMarked }) {
                   </tr>
                 )
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
+          <Pagination
+            currentPage={page}
+            totalItems={filteredEmployees.length}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
         </div>
       </form>
     </Card>

@@ -72,6 +72,7 @@ export const employees = {
   importCsv: 'Import CSV',
   importCsvHint: 'CSV: employee_id, full_name, email, department_id or department_name',
   bulkResult: (created, failed) => (failed > 0 ? `Created ${created}, skipped ${failed} (duplicates/invalid).` : `Created ${created} employee(s).`),
+  searchPlaceholder: 'Search by name or ID',
 }
 
 export const departments = {
@@ -144,6 +145,11 @@ export const common = {
   searchPlaceholder: 'Search…',
   noMatches: 'No matches',
   clearFilter: 'Clear filter',
+  paginationPrev: 'Previous',
+  paginationNext: 'Next',
+  paginationPageOf: (current, total) => `Page ${current} of ${total}`,
+  paginationShowing: (from, to, total) => `Showing ${from}–${to} of ${total}`,
+  paginationRowsPerPage: 'Rows per page',
 }
 
 export const datePicker = {

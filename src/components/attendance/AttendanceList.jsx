@@ -5,6 +5,7 @@ import { colors } from '../../theme'
 import { attendance as strings, common } from '../../content/strings'
 import { useToast } from '../../context/ToastContext'
 import Table from '../ui/Table'
+import Pagination, { DEFAULT_PAGE_SIZE } from '../ui/Pagination'
 import SkeletonTable from '../ui/SkeletonTable'
 import ErrorMessage from '../ui/ErrorMessage'
 import Select from '../ui/Select'
@@ -25,6 +26,8 @@ export default function AttendanceList({ refreshTrigger }) {
   const [appliedDateFrom, setAppliedDateFrom] = useState('')
   const [appliedDateTo, setAppliedDateTo] = useState('')
   const [dateError, setDateError] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
 
   const statusOptions = useMemo(
     () => [
@@ -157,6 +160,18 @@ export default function AttendanceList({ refreshTrigger }) {
     return summary
   }, [filteredList])
 
+  const paginatedList = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredList.slice(start, start + pageSize)
+  }, [filteredList, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [appliedEmployeeId, appliedFilterStatus, appliedDateFrom, appliedDateTo])
+  useEffect(() => {
+    setPage(1)
+  }, [pageSize])
+
   if (loading) {
     return (
       <div className="overflow-hidden rounded-2xl bg-background">
@@ -274,25 +289,34 @@ export default function AttendanceList({ refreshTrigger }) {
           </div>
         )}
       </div>
-      <Table
-        columns={columns}
-        empty={strings.empty}
-        emptyAction={null}
-        isEmpty={filteredList.length === 0}
-      >
-        {filteredList.map((record, index) => {
-          const dateStr = record.date ?? record.attendance_date ?? '—'
-          const employeeName = record.employeeName ?? record.employee_name ?? record.fullName ?? record.full_name ?? record.employeeId ?? record.employee_id ?? '—'
-          const statusVal = record.status ?? '—'
-          return (
-            <tr key={record.id ?? record.attendance_id ?? index} className="border-t border-surface-alt">
-              <td className="px-4 py-3 text-sm text-text">{dateStr}</td>
-              <td className="px-4 py-3 text-sm text-text">{employeeName}</td>
-              <td className="px-4 py-3 text-sm text-text">{statusVal}</td>
-            </tr>
-          )
-        })}
-      </Table>
+      <div className="overflow-hidden rounded-2xl border border-divider bg-background">
+        <Table
+          columns={columns}
+          empty={strings.empty}
+          emptyAction={null}
+          isEmpty={filteredList.length === 0}
+        >
+          {paginatedList.map((record, index) => {
+            const dateStr = record.date ?? record.attendance_date ?? '—'
+            const employeeName = record.employeeName ?? record.employee_name ?? record.fullName ?? record.full_name ?? record.employeeId ?? record.employee_id ?? '—'
+            const statusVal = record.status ?? '—'
+            return (
+              <tr key={record.id ?? record.attendance_id ?? index} className="border-t border-surface-alt">
+                <td className="px-4 py-3 text-sm text-text">{dateStr}</td>
+                <td className="px-4 py-3 text-sm text-text">{employeeName}</td>
+                <td className="px-4 py-3 text-sm text-text">{statusVal}</td>
+              </tr>
+            )
+          })}
+        </Table>
+        <Pagination
+          currentPage={page}
+          totalItems={filteredList.length}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
+      </div>
     </div>
   )
 }
